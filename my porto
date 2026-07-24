@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imanuel Seo, S.Kom., Gr - Portfolio Personal Dynamic</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tailwind Configuration for Custom Colors & Dark Mode -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom Styles for Background Image & Glassmorphism -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Fixed Fullscreen Nature Background with High-Readability Overlay */
+    .bg-landscape {
+      background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+    
+    /* Custom Glassmorphism Style for Cards */
+    .glass-card {
+      background: rgba(15, 23, 42, 0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .glass-nav {
+      background: rgba(2, 6, 23, 0.90);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Typing cursor animation */
+    .typing-cursor::after {
+      content: '|';
+      animation: blink 0.8s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(2, 6, 23, 0.7);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2563eb;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 transition-colors duration-300 relative selection:bg-brand-600 selection:text-white min-h-screen overflow-x-hidden bg-landscape">
+
+  <!-- OVERLAY LAYER FOR MAX READABILITY -->
+  <div class="fixed inset-0 bg-slate-950/75 backdrop-blur-[3px] pointer-events-none z-0"></div>
+
+  <!-- Canvas Partikel subtle effect -->
+  <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-60"></canvas>
+
+  <!-- Sync Status Floating Pill -->
+  <div id="syncBadge" class="fixed bottom-4 left-4 z-40 glass-card px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2 border border-slate-700 text-slate-300 shadow-xl">
+    <span id="syncDot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+    <span id="syncText">Menghubungkan Database...</span>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-8 py-4">
+    <nav class="max-w-7xl mx-auto glass-nav rounded-2xl px-5 py-3 flex justify-between items-center shadow-2xl">
+      
+      <!-- Top Left Brand -->
+      <a href="#" class="text-sm sm:text-base md:text-lg font-black tracking-tight text-white flex items-center gap-3 group">
+        <div class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-brand-500 shadow-lg shrink-0">
+          <img id="navAvatar" src="https://placehold.co/400x400/2563eb/ffffff?text=Imanuel+Seo" alt="Imanuel Seo Logo" class="w-full h-full object-cover group-hover:scale-110 transition duration-300" />
+        </div>
+        <span class="bg-gradient-to-r from-white via-slate-100 to-brand-300 bg-clip-text text-transparent" id="navNameText">
+          Imanuel Seo, S.Kom., Gr<span class="text-brand-400">.</span>
+        </span>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="hidden lg:flex items-center space-x-6 text-sm font-medium text-slate-200">
+        <a href="#about" class="hover:text-brand-400 transition">Tentang</a>
+        <a href="#skills" class="hover:text-brand-400 transition">Keahlian</a>
+        <a href="#portfolio" class="hover:text-brand-400 transition">Portfolio</a>
+        <a href="#experience" class="hover:text-brand-400 transition">Pengalaman</a>
+        <a href="#services" class="hover:text-brand-400 transition">Layanan</a>
+        <a href="#contact" class="hover:text-brand-400 transition">Kontak</a>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <!-- Edit Mode Toggle Button -->
+        <button id="toggleEditBtn" onclick="toggleEditMode()" class="bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 border border-amber-500/50 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md">
+          <i data-lucide="edit-3" class="w-4 h-4"></i>
+          <span id="editBtnLabel">Mode Edit: OFF</span>
+        </button>
+
+        <a href="https://wa.me/6281230914749" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition shadow-lg shadow-brand-600/40 items-center gap-2">
+          <i data-lucide="message-square" class="w-4 h-4"></i>
+          <span>Hubungi Saya</span>
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button id="mobileMenuBtn" aria-label="Open Mobile Menu" class="lg:hidden p-2.5 rounded-xl glass-card hover:bg-slate-800/80 transition">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile Drawer Overlay -->
+    <div id="mobileDrawer" class="hidden lg:hidden fixed inset-0 top-[76px] bg-slate-950/95 backdrop-blur-xl z-40 p-6 flex flex-col justify-between transition-all">
+      <div class="space-y-4 text-center">
+        <a href="#about" class="mobile-link block py-3 text-lg font-semibold border-b border-slate-800 text-slate-200">Tentang</a>
+        <a href="#skills" class="mobile-link block py-3 text-lg font-semibold border-b border-slate-800 text-slate-200">Keahlian</a>
+        <a href="#portfolio" class="mobile-link block py-3 text-lg font-semibold border-b border-slate-800 text-slate-200">Portfolio</a>
+        <a href="#experience" class="mobile-link block py-3 text-lg font-semibold border-b border-slate-800 text-slate-200">Pengalaman</a>
+        <a href="#services" class="mobile-link block py-3 text-lg font-semibold border-b border-slate-800 text-slate-200">Layanan</a>
+        <a href="#contact" class="mobile-link block py-3 text-lg font-semibold border-b border-slate-800 text-slate-200">Kontak</a>
+      </div>
+      <div class="space-y-3 pb-8">
+        <a href="https://wa.me/6281230914749" target="_blank" class="w-full bg-brand-600 hover:bg-brand-700 text-white py-3 rounded-xl font-semibold transition flex items-center justify-center gap-2">
+          <i data-lucide="phone" class="w-5 h-5"></i> WhatsApp Direct
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="relative min-h-screen flex items-center justify-center pt-28 pb-16 px-6 max-w-7xl mx-auto z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+      
+      <!-- Left Column: Profile Photo Upload Container -->
+      <div class="lg:col-span-5 flex justify-center">
+        <div class="relative group w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96">
+          <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 via-indigo-500 to-cyan-400 rounded-3xl blur-xl opacity-60 group-hover:opacity-90 transition duration-500 animate-pulse"></div>
+          
+          <div class="relative w-full h-full glass-card rounded-3xl overflow-hidden p-3 flex items-center justify-center border-2 border-brand-500/50 shadow-2xl">
+            <!-- Profile Image Holder -->
+            <img id="profileImage" src="https://placehold.co/400x400/2563eb/ffffff?text=Imanuel+Seo+S.Kom" alt="Imanuel Seo" class="w-full h-full object-cover rounded-2xl shadow-inner transition transform group-hover:scale-105 duration-500" />
+            
+            <!-- Upload Overlay (Uploads image & permanently saves to Cloud Database) -->
+            <label for="imageUpload" class="absolute inset-0 bg-slate-950/80 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 cursor-pointer text-xs font-semibold text-center p-6 backdrop-blur-sm">
+              <i data-lucide="upload-cloud" class="w-10 h-10 mb-2 text-brand-400 animate-bounce"></i>
+              <span>Klik untuk Upload & Simpan Foto Permanen</span>
+              <span class="text-[10px] text-brand-300 font-normal mt-1">(Tersimpan di Cloud & dapat dilihat siapapun)</span>
+            </label>
+            <input type="file" id="imageUpload" accept="image/*" class="hidden" onchange="uploadAndSaveProfilePhoto(event)" />
+          </div>
+
+          <!-- Quick Badge overlay -->
+          <div class="absolute -bottom-4 -right-2 glass-card px-4 py-2 rounded-2xl flex items-center gap-2 border border-brand-500/40 shadow-xl z-20">
+            <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="text-xs font-bold text-white">Guru Terverifikasi</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Info & Dynamic Typing Effect -->
+      <div class="lg:col-span-7 space-y-6 text-left">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-300 border border-brand-500/30 backdrop-blur-md">
+          <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+          <span id="heroTagline">Informatics Teacher & AI Enthusiast</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight text-white">
+          Halo, Saya <br />
+          <span class="bg-gradient-to-r from-brand-400 via-indigo-300 to-sky-300 bg-clip-text text-transparent" id="heroName">Imanuel Seo, S.Kom., Gr</span>
+        </h1>
+
+        <!-- Typing Effect Text -->
+        <div class="text-xl sm:text-2xl font-bold text-slate-200 h-10 flex items-center">
+          <span id="typingText" class="text-brand-400 typing-cursor"></span>
+        </div>
+
+        <blockquote id="heroQuote" class="italic text-slate-200 border-l-4 border-brand-500 pl-4 py-2 text-sm sm:text-base bg-brand-500/10 rounded-r-xl">
+          "Kita hanya bisa melihat jarak pendek ke depan, tetapi kita bisa melihat banyak hal yang perlu dilakukan di sana"
+        </blockquote>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="#portfolio" class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-3.5 rounded-xl font-semibold transition shadow-lg shadow-brand-600/40 flex items-center gap-2 transform hover:-translate-y-0.5">
+            <i data-lucide="folder-git-2" class="w-5 h-5"></i> Lihat Portfolio
+          </a>
+          <button onclick="openCvModal()" class="glass-card px-6 py-3.5 rounded-xl font-semibold hover:bg-slate-800/80 transition flex items-center gap-2 border border-slate-700 shadow-md transform hover:-translate-y-0.5 text-white">
+            <i data-lucide="file-text" class="w-5 h-5 text-brand-400"></i> Preview CV
+          </button>
+          <a href="https://wa.me/6281230914749" target="_blank" class="border border-brand-500 text-brand-300 hover:bg-brand-600 hover:text-white px-6 py-3.5 rounded-xl font-semibold transition flex items-center gap-2 transform hover:-translate-y-0.5">
+            <i data-lucide="phone-call" class="w-5 h-5"></i> 081230914749
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="about" class="py-20 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <span class="text-xs font-bold uppercase tracking-widest text-brand-400">Profil & Visi</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 text-white flex items-center justify-center gap-3">
+        Tentang Saya
+        <button class="admin-only hidden p-1.5 bg-amber-500/20 text-amber-300 hover:bg-amber-500/40 rounded-xl text-xs font-semibold" onclick="openEditBioModal()">
+          <i data-lucide="pencil" class="w-4 h-4"></i>
+        </button>
+      </h2>
+      <div class="w-20 h-1 bg-brand-500 mx-auto mt-3 rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      
+      <!-- Bio Card -->
+      <div class="lg:col-span-7 glass-card p-8 rounded-3xl space-y-6 flex flex-col justify-between shadow-2xl">
+        <div class="space-y-5">
+          <p id="aboutBioText" class="text-base leading-relaxed text-slate-100">
+            Halo! Saya <strong class="text-white">Imanuel Seo, S.Kom., Gr.</strong> Saya adalah guru Informatika dan KKA (Koding dan Kecerdasan Artifisial) di <strong class="text-white">SMA Negeri 6 Kupang</strong>. Berfokus pada integrasi teknologi modern, pemrograman terstruktur, dan pemanfaatan AI ke dalam pola pikir belajar peserta didik.
+          </p>
+
+          <h3 class="font-bold text-lg text-brand-400 flex items-center gap-2">
+            <i data-lucide="briefcase" class="w-5 h-5"></i> Ringkasan Pengalaman Mengajar:
+          </h3>
+          <p class="text-xs text-slate-300">
+            Daftar lengkap riwayat mengajar dapat disesuaikan pada bagian <a href="#experience" class="text-brand-400 underline">Pengalaman & Rekam Jejak</a> di bawah.
+          </p>
+
+          <!-- Dynamic Skills Focus Badges -->
+          <div class="pt-2">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="font-bold text-lg text-brand-400 flex items-center gap-2">
+                <i data-lucide="target" class="w-5 h-5"></i> Fokus Keahlian:
+              </h3>
+              <button class="admin-only hidden px-2.5 py-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/40 rounded-lg text-xs font-bold flex items-center gap-1" onclick="openAddSkillFocusModal()">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tambah Keahlian
+              </button>
+            </div>
+            <div id="skillsFocusContainer" class="flex flex-wrap gap-2">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Learning Vision Card -->
+        <div class="p-5 rounded-2xl bg-gradient-to-r from-brand-600/20 to-indigo-600/20 border border-brand-500/40 text-xs sm:text-sm text-slate-200 relative group">
+          <div class="flex justify-between items-center mb-1">
+            <strong class="text-brand-300 font-bold block">Visi Pembelajaran:</strong>
+            <button class="admin-only hidden p-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/40 rounded-md text-xs" onclick="openEditVisionModal()">
+              <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <p id="learningVisionText" class="italic">"Membantu peserta didik menjadi generasi digital yang kreatif, kritis, adaptif terhadap teknologi AI, dan berkarakter kuat."</p>
+        </div>
+      </div>
+
+      <!-- Animated & Editable Stats Cards -->
+      <div class="lg:col-span-5 grid grid-cols-2 gap-4">
+        
+        <!-- Stats Card 1: Masa Aktif -->
+        <div class="glass-card p-6 rounded-3xl flex flex-col items-center justify-center text-center shadow-lg hover:border-brand-500/50 transition relative group">
+          <button class="admin-only hidden absolute top-3 right-3 p-1.5 bg-amber-500/20 text-amber-300 rounded-lg text-xs" onclick="openEditStatsModal('activeYears')">
+            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+          </button>
+          <div class="p-3.5 rounded-2xl bg-brand-500/20 text-brand-400 mb-3"><i data-lucide="calendar" class="w-6 h-6"></i></div>
+          <span id="statActiveYears" class="text-2xl font-black text-white">2024-Aktif</span>
+          <span id="statActiveSchool" class="text-xs text-slate-300 mt-1 font-medium">SMAN 6 Kupang</span>
+        </div>
+
+        <!-- Stats Card 2: Jumlah Siswa Didik -->
+        <div class="glass-card p-6 rounded-3xl flex flex-col items-center justify-center text-center shadow-lg hover:border-brand-500/50 transition relative group">
+          <button class="admin-only hidden absolute top-3 right-3 p-1.5 bg-amber-500/20 text-amber-300 rounded-lg text-xs" onclick="openEditStatsModal('studentsCount')">
+            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+          </button>
+          <div class="p-3.5 rounded-2xl bg-brand-500/20 text-brand-400 mb-3"><i data-lucide="users" class="w-6 h-6"></i></div>
+          <span id="statStudentsCount" class="text-3xl font-black text-brand-400">1000+</span>
+          <span id="statStudentsLabel" class="text-xs text-slate-300 mt-1 font-medium">Siswa Didik</span>
+        </div>
+
+        <!-- Stats Card 3: Modul & Bahan Ajar -->
+        <div class="glass-card p-6 rounded-3xl flex flex-col justify-center text-left col-span-2 shadow-lg hover:border-brand-500/50 transition space-y-2">
+          <div class="flex items-center gap-3">
+            <div class="p-3 rounded-2xl bg-brand-500/20 text-brand-400"><i data-lucide="book-open" class="w-6 h-6"></i></div>
+            <div>
+              <span class="text-lg font-bold text-white block">Modul & Bahan Ajar</span>
+              <span class="text-xs text-slate-300">Interaktif & Berbasis Projek Real-World</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-200 pt-2 border-t border-slate-800">
+            Analisis Data, Algoritma Pemrograman Python, Basis Data SQL, Pembelajaran Prompt Engineering & Generative AI.
+          </p>
+        </div>
+
+        <!-- Dynamic Achievement Highlight Card -->
+        <div id="achievementHighlightCard" class="glass-card p-6 rounded-3xl flex flex-col items-center justify-center text-center col-span-2 shadow-lg border-2 border-amber-500/40 hover:border-amber-500/70 transition relative group">
+          <button class="admin-only hidden absolute top-3 right-3 p-1.5 bg-amber-500/20 text-amber-300 rounded-lg text-xs" onclick="openEditStatsModal('achievement')">
+            <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+          </button>
+          <div class="p-3.5 rounded-2xl bg-amber-500/20 text-amber-400 mb-2"><i data-lucide="award" class="w-7 h-7"></i></div>
+          <span id="statAchievementTitle" class="text-xl font-extrabold text-amber-400">🏆 Prestasi BTI 2026</span>
+          <span id="statAchievementDesc" class="text-xs text-slate-200 mt-1">Lolos Seleksi Balai Talenta Indonesia & Fasilitator Digital</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section id="skills" class="py-20 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <span class="text-xs font-bold uppercase tracking-widest text-brand-400">Kompetensi Teknikal</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 text-white">Keahlian & Tools</h2>
+      <div class="w-20 h-1 bg-brand-500 mx-auto mt-3 rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      
+      <!-- Programming -->
+      <div class="glass-card p-6 rounded-3xl space-y-4 hover:border-brand-500/50 transition shadow-xl">
+        <div class="flex items-center gap-3">
+          <div class="p-3 rounded-2xl bg-brand-500/20 text-brand-400"><i data-lucide="code" class="w-6 h-6"></i></div>
+          <h3 class="font-bold text-lg text-white">Programming</h3>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1.5 bg-brand-500/20 text-brand-300 text-xs font-semibold rounded-lg border border-brand-500/30">Python</span>
+          <span class="px-3 py-1.5 bg-brand-500/20 text-brand-300 text-xs font-semibold rounded-lg border border-brand-500/30">HTML5</span>
+          <span class="px-3 py-1.5 bg-brand-500/20 text-brand-300 text-xs font-semibold rounded-lg border border-brand-500/30">CSS3</span>
+          <span class="px-3 py-1.5 bg-brand-500/20 text-brand-300 text-xs font-semibold rounded-lg border border-brand-500/30">JavaScript</span>
+          <span class="px-3 py-1.5 bg-brand-500/20 text-brand-300 text-xs font-semibold rounded-lg border border-brand-500/30">SQL</span>
+          <span class="px-3 py-1.5 bg-brand-500/20 text-brand-300 text-xs font-semibold rounded-lg border border-brand-500/30">Git</span>
+        </div>
+      </div>
+
+      <!-- AI Tools -->
+      <div class="glass-card p-6 rounded-3xl space-y-4 hover:border-purple-500/50 transition shadow-xl">
+        <div class="flex items-center gap-3">
+          <div class="p-3 rounded-2xl bg-purple-500/20 text-purple-400"><i data-lucide="bot" class="w-6 h-6"></i></div>
+          <h3 class="font-bold text-lg text-white">AI Tools</h3>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1.5 bg-purple-500/20 text-purple-300 text-xs font-semibold rounded-lg border border-purple-500/30">Prompt Eng.</span>
+          <span class="px-3 py-1.5 bg-purple-500/20 text-purple-300 text-xs font-semibold rounded-lg border border-purple-500/30">ChatGPT</span>
+          <span class="px-3 py-1.5 bg-purple-500/20 text-purple-300 text-xs font-semibold rounded-lg border border-purple-500/30">Claude</span>
+          <span class="px-3 py-1.5 bg-purple-500/20 text-purple-300 text-xs font-semibold rounded-lg border border-purple-500/30">Gemini</span>
+          <span class="px-3 py-1.5 bg-purple-500/20 text-purple-300 text-xs font-semibold rounded-lg border border-purple-500/30">NotebookLM</span>
+          <span class="px-3 py-1.5 bg-purple-500/20 text-purple-300 text-xs font-semibold rounded-lg border border-purple-500/30">Copilot</span>
+        </div>
+      </div>
+
+      <!-- Data Science -->
+      <div class="glass-card p-6 rounded-3xl space-y-4 hover:border-emerald-500/50 transition shadow-xl">
+        <div class="flex items-center gap-3">
+          <div class="p-3 rounded-2xl bg-emerald-500/20 text-emerald-400"><i data-lucide="database" class="w-6 h-6"></i></div>
+          <h3 class="font-bold text-lg text-white">Data Science</h3>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1.5 bg-emerald-500/20 text-emerald-300 text-xs font-semibold rounded-lg border border-emerald-500/30">Excel Advanced</span>
+          <span class="px-3 py-1.5 bg-emerald-500/20 text-emerald-300 text-xs font-semibold rounded-lg border border-emerald-500/30">Power BI</span>
+          <span class="px-3 py-1.5 bg-emerald-500/20 text-emerald-300 text-xs font-semibold rounded-lg border border-emerald-500/30">Google Sheets</span>
+          <span class="px-3 py-1.5 bg-emerald-500/20 text-emerald-300 text-xs font-semibold rounded-lg border border-emerald-500/30">Pandas</span>
+        </div>
+      </div>
+
+      <!-- Teaching -->
+      <div class="glass-card p-6 rounded-3xl space-y-4 hover:border-amber-500/50 transition shadow-xl">
+        <div class="flex items-center gap-3">
+          <div class="p-3 rounded-2xl bg-amber-500/20 text-amber-400"><i data-lucide="graduation-cap" class="w-6 h-6"></i></div>
+          <h3 class="font-bold text-lg text-white">Teaching & Pedagogy</h3>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-semibold rounded-lg border border-amber-500/30">Kurikulum Merdeka</span>
+          <span class="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-semibold rounded-lg border border-amber-500/30">PBL Method</span>
+          <span class="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-semibold rounded-lg border border-amber-500/30">Deep Learning</span>
+          <span class="px-3 py-1.5 bg-amber-500/20 text-amber-300 text-xs font-semibold rounded-lg border border-amber-500/30">Media Interaktif</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="portfolio" class="py-20 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <span class="text-xs font-bold uppercase tracking-widest text-brand-400">Karya & Project</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 text-white">Portfolio Terpilih</h2>
+      <div class="w-20 h-1 bg-brand-500 mx-auto mt-3 rounded-full"></div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="flex flex-wrap justify-center gap-3 mb-10">
+      <button onclick="filterProjects('all')" class="project-filter-btn px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-brand-600 text-white shadow-md transition">Semua</button>
+      <button onclick="filterProjects('ai')" class="project-filter-btn px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold glass-card text-slate-200 hover:bg-brand-500/30 transition">Inovasi AI & Prompt</button>
+      <button onclick="filterProjects('web')" class="project-filter-btn px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold glass-card text-slate-200 hover:bg-brand-500/30 transition">Aplikasi Web</button>
+      <button onclick="filterProjects('edu')" class="project-filter-btn px-5 py-2 rounded-xl text-xs sm:text-sm font-semibold glass-card text-slate-200 hover:bg-brand-500/30 transition">Media Pembelajaran</button>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projectsContainer">
+      
+      <!-- Project Item 1 -->
+      <div class="project-card glass-card rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-300 flex flex-col justify-between" data-category="ai">
+        <div>
+          <div class="h-48 bg-slate-900 relative overflow-hidden group">
+            <img src="https://placehold.co/600x400/1e3a8a/ffffff?text=AI+Learning+Assistant" alt="AI Learning Assistant" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+            <div class="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3">
+              <button onclick="openModal('Asisten Pembelajaran AI Informatika', 'Pengembangan bot AI berbasis Prompt Engineering untuk membantu siswa SMA memahami logika algoritma & Python secara interaktif.', 'Python, ChatGPT API, Streamlit', 'ai')" class="px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-semibold shadow-md">Detail Project</button>
+            </div>
+          </div>
+          <div class="p-6 space-y-3">
+            <span class="px-3 py-1 bg-purple-500/20 text-purple-300 text-[11px] font-bold rounded-lg border border-purple-500/30">AI & Education</span>
+            <h3 class="text-xl font-bold text-white">Asisten Pembelajaran AI Informatika</h3>
+            <p class="text-xs text-slate-300 line-clamp-3">
+              Modul integrasi AI yang disesuaikan untuk siswa SMAN 6 Kupang dalam mempermudah pembelajaran logika coding dan Computational Thinking.
+            </p>
+          </div>
+        </div>
+        <div class="px-6 pb-6 pt-2 flex items-center justify-between border-t border-slate-800">
+          <span class="text-[11px] text-slate-400 font-medium">Python & Generative AI</span>
+          <i data-lucide="cpu" class="w-4 h-4 text-brand-400"></i>
+        </div>
+      </div>
+
+      <!-- Project Item 2 -->
+      <div class="project-card glass-card rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-300 flex flex-col justify-between" data-category="web">
+        <div>
+          <div class="h-48 bg-slate-900 relative overflow-hidden group">
+            <img src="https://placehold.co/600x400/2563eb/ffffff?text=Portal+E-Learning+SMAN+6" alt="Portal E-Learning" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+            <div class="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3">
+              <button onclick="openModal('Sistem Portal Pembelajaran Digital', 'Aplikasi portal pembelajaran berbasis web ringan untuk distribusi materi, pengumpulan tugas, dan evaluasi nilai otomatis.', 'HTML5, Tailwind, JS, Sheets API', 'web')" class="px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-semibold shadow-md">Detail Project</button>
+            </div>
+          </div>
+          <div class="p-6 space-y-3">
+            <span class="px-3 py-1 bg-brand-500/20 text-brand-300 text-[11px] font-bold rounded-lg border border-brand-500/30">Web Development</span>
+            <h3 class="text-xl font-bold text-white">Portal Kelas Digital Informatika</h3>
+            <p class="text-xs text-slate-300 line-clamp-3">
+              Sistem platform materi interaktif terintegrasi untuk mendukung kegiatan belajar mengajar berbasis Kurikulum Merdeka.
+            </p>
+          </div>
+        </div>
+        <div class="px-6 pb-6 pt-2 flex items-center justify-between border-t border-slate-800">
+          <span class="text-[11px] text-slate-400 font-medium">HTML, JS & Tailwind</span>
+          <i data-lucide="globe" class="w-4 h-4 text-brand-400"></i>
+        </div>
+      </div>
+
+      <!-- Project Item 3 -->
+      <div class="project-card glass-card rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-300 flex flex-col justify-between" data-category="edu">
+        <div>
+          <div class="h-48 bg-slate-900 relative overflow-hidden group">
+            <img src="https://placehold.co/600x400/0d9488/ffffff?text=Modul+KKA+Visual" alt="Modul KKA Visual" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" />
+            <div class="absolute inset-0 bg-slate-950/70 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-3">
+              <button onclick="openModal('Modul Interaktif KKA & Data Science', 'Rangkaian modul visual berbasis infografis interaktif untuk pembelajaran Koding & Kecerdasan Artifisial di tingkat SMA.', 'Canva, Python, Jupyter, NotebookLM', 'edu')" class="px-4 py-2 bg-brand-600 text-white rounded-xl text-xs font-semibold shadow-md">Detail Project</button>
+            </div>
+          </div>
+          <div class="p-6 space-y-3">
+            <span class="px-3 py-1 bg-emerald-500/20 text-emerald-300 text-[11px] font-bold rounded-lg border border-emerald-500/30">Media Pembelajaran</span>
+            <h3 class="text-xl font-bold text-white">Modul Interaktif KKA & AI Literacy</h3>
+            <p class="text-xs text-slate-300 line-clamp-3">
+              Bahan ajar terstruktur mencakup analisis data, etika AI, prompt engineering, dan dasar algoritma pemrograman Python.
+            </p>
+          </div>
+        </div>
+        <div class="px-6 pb-6 pt-2 flex items-center justify-between border-t border-slate-800">
+          <span class="text-[11px] text-slate-400 font-medium">NotebookLM & Jupyter</span>
+          <i data-lucide="book" class="w-4 h-4 text-brand-400"></i>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="experience" class="py-20 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <span class="text-xs font-bold uppercase tracking-widest text-brand-400">Jejak Karir & Pengalaman</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 text-white flex items-center justify-center gap-3">
+        Pengalaman & Rekam Jejak
+        <button class="admin-only hidden px-3 py-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/40 border border-amber-500/40 rounded-xl text-xs font-bold flex items-center gap-1 shadow" onclick="openAddExperienceModal()">
+          <i data-lucide="plus" class="w-4 h-4"></i> Tambah Pengalaman
+        </button>
+      </h2>
+      <div class="w-20 h-1 bg-brand-500 mx-auto mt-3 rounded-full"></div>
+    </div>
+
+    <!-- Timeline Container (Rendered via JS for real-time updates) -->
+    <div id="experienceTimeline" class="relative border-l-2 border-brand-500/40 max-w-4xl mx-auto pl-6 sm:pl-10 space-y-12">
+      <!-- Dynamic list rendered from Firestore database -->
+    </div>
+  </section>
+
+  <section id="services" class="py-20 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <span class="text-xs font-bold uppercase tracking-widest text-brand-400">Kolaborasi & Layanan</span>
+      <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 text-white">Layanan & Keahlian Professional</h2>
+      <div class="w-20 h-1 bg-brand-500 mx-auto mt-3 rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <div class="glass-card p-8 rounded-3xl space-y-4 hover:border-brand-500/50 transition shadow-xl flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="p-4 rounded-2xl bg-brand-500/20 text-brand-400 w-fit"><i data-lucide="presentation" class="w-8 h-8"></i></div>
+          <h3 class="text-xl font-bold text-white">Pelatihan & Workshop AI Guru</h3>
+          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+            Narasumber dan fasilitator workshop penggunaan AI (ChatGPT, Claude, NotebookLM) untuk pembuatan modul ajar, soal otomatis, dan efisiensi admin guru.
+          </p>
+        </div>
+        <a href="https://wa.me/6281230914749?text=Halo%20Pak%20Imanuel,%20saya%20ingin%20berdiskusi%20tentang%20Workshop%20AI%20Guru" target="_blank" class="pt-4 text-xs font-bold text-brand-300 flex items-center gap-1 hover:underline">
+          Konsultasi Workshop <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <div class="glass-card p-8 rounded-3xl space-y-4 hover:border-purple-500/50 transition shadow-xl flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="p-4 rounded-2xl bg-purple-500/20 text-purple-400 w-fit"><i data-lucide="layout" class="w-8 h-8"></i></div>
+          <h3 class="text-xl font-bold text-white">Pengembangan Web & Media Pembelajaran</h3>
+          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+            Pembuatan website portofolio, portal sekolah, landing page interaktif, dan aplikasi web sederhana berbasis HTML/Tailwind/JS.
+          </p>
+        </div>
+        <a href="https://wa.me/6281230914749?text=Halo%20Pak%20Imanuel,%20saya%20tertarik%20pembuatan%20Web/Media%20Pembelajaran" target="_blank" class="pt-4 text-xs font-bold text-purple-300 flex items-center gap-1 hover:underline">
+          Tanyakan Proyek <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+      <div class="glass-card p-8 rounded-3xl space-y-4 hover:border-emerald-500/50 transition shadow-xl flex flex-col justify-between">
+        <div class="space-y-4">
+          <div class="p-4 rounded-2xl bg-emerald-500/20 text-emerald-400 w-fit"><i data-lucide="file-code-2" class="w-8 h-8"></i></div>
+          <h3 class="text-xl font-bold text-white">Pendampingan Coding & KKA</h3>
+          <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+            Bimbingan belajar private atau kelompok kecil untuk siswa & pendidik dalam menguasai logika Python, Computational Thinking, dan Data Science.
+          </p>
+        </div>
+        <a href="https://wa.me/6281230914749?text=Halo%20Pak%20Imanuel,%20saya%20ingin%20info%20Pendampingan%20Coding" target="_blank" class="pt-4 text-xs font-bold text-emerald-300 flex items-center gap-1 hover:underline">
+          Daftar Bimbingan <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact" class="py-20 px-6 max-w-7xl mx-auto relative z-10">
+    <div class="glass-card p-8 md:p-12 rounded-3xl grid grid-cols-1 lg:grid-cols-12 gap-12 shadow-2xl border border-brand-500/30">
+      
+      <div class="lg:col-span-5 space-y-6">
+        <span class="text-xs font-bold uppercase tracking-widest text-brand-400">Mari Terhubung</span>
+        <h2 class="text-3xl font-extrabold tracking-tight text-white">Hubungi Saya</h2>
+        <p class="text-slate-200 text-sm leading-relaxed">
+          Punya pertanyaan seputar pelatihan AI Guru, kolaborasi workshop, pembuatan media pembelajaran, atau konsultasi seputar Informatika? Jangan ragu untuk mengirimkan pesan.
+        </p>
+
+        <div class="space-y-4 text-sm pt-4">
+          <div class="flex items-center gap-4 p-3.5 rounded-2xl glass-card">
+            <div class="p-3 rounded-xl bg-brand-500/20 text-brand-400"><i data-lucide="phone" class="w-5 h-5"></i></div>
+            <div>
+              <p class="text-xs text-slate-300">WhatsApp / Telegram</p>
+              <p class="font-semibold text-white">+62 812-3091-4749</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-3.5 rounded-2xl glass-card">
+            <div class="p-3 rounded-xl bg-brand-500/20 text-brand-400"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+            <div>
+              <p class="text-xs text-slate-300">Lokasi Tugas</p>
+              <p class="font-semibold text-white">Kupang, NTT (SMA Negeri 6 Kupang)</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-3.5 rounded-2xl glass-card">
+            <div class="p-3 rounded-xl bg-brand-500/20 text-brand-400"><i data-lucide="mail" class="w-5 h-5"></i></div>
+            <div>
+              <p class="text-xs text-slate-300">Email Utama</p>
+              <p class="font-semibold text-white">imanuel.seo@guru.sma.belajar.id</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form id="contactForm" class="lg:col-span-7 space-y-5" onsubmit="handleFormSubmit(event)">
+        <div>
+          <label class="block text-xs font-semibold mb-1.5 text-slate-200">Nama Lengkap</label>
+          <input type="text" id="senderName" placeholder="Masukkan nama Anda" class="w-full p-3.5 rounded-xl border border-slate-700 bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition" required />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1.5 text-slate-200">Email / No. WhatsApp</label>
+          <input type="text" id="senderContact" placeholder="email@contoh.com atau 0812xxx" class="w-full p-3.5 rounded-xl border border-slate-700 bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition" required />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1.5 text-slate-200">Pesan / Keperluan</label>
+          <textarea id="senderMessage" rows="4" placeholder="Tuliskan pesan atau keperluan Anda di sini..." class="w-full p-3.5 rounded-xl border border-slate-700 bg-slate-900/80 text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition" required></textarea>
+        </div>
+        <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 rounded-xl transition shadow-lg shadow-brand-600/40 flex items-center justify-center gap-2 transform active:scale-98">
+          <i data-lucide="send" class="w-4 h-4"></i> Kirim Pesan Langsung
+        </button>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- Custom Toast Notification Box -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 transition duration-300 max-w-md glass-card p-4 rounded-2xl shadow-2xl border-l-4 border-brand-500 flex items-center gap-3 pointer-events-none">
+    <div class="p-2 rounded-xl bg-brand-500/20 text-brand-400 shrink-0"><i data-lucide="check-circle-2" class="w-6 h-6"></i></div>
+    <div>
+      <h4 class="font-bold text-sm text-white" id="toastTitle">Berhasil!</h4>
+      <p class="text-xs text-slate-300" id="toastMessage">Pesan Anda berhasil disiapkan.</p>
+    </div>
+  </div>
+
+  <!-- Project Detail Modal -->
+  <div id="projectModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card max-w-xl w-full rounded-3xl p-6 sm:p-8 space-y-6 relative border border-slate-700 shadow-2xl">
+      <button onclick="closeModal()" class="absolute top-4 right-4 p-2 rounded-xl hover:bg-slate-800/80 transition text-slate-300"><i data-lucide="x" class="w-5 h-5"></i></button>
+      <div class="space-y-2">
+        <span id="modalCategory" class="px-3 py-1 bg-brand-500/20 text-brand-300 font-bold text-xs rounded-full">Project</span>
+        <h3 id="modalTitle" class="text-2xl font-bold text-white">Judul Project</h3>
+      </div>
+      <p id="modalDesc" class="text-sm text-slate-200 leading-relaxed">Deskripsi lengkap project.</p>
+      <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-1">
+        <span class="text-xs text-slate-400 font-semibold">Teknologi Digunakan:</span>
+        <p id="modalTech" class="text-xs font-mono text-brand-400"></p>
+      </div>
+      <div class="flex justify-end gap-3 pt-2">
+        <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 text-white text-xs font-semibold hover:bg-slate-700 transition">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CV Preview Modal -->
+  <div id="cvModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card max-w-2xl w-full rounded-3xl p-6 sm:p-8 space-y-6 relative border border-slate-700 max-h-[90vh] overflow-y-auto shadow-2xl">
+      <button onclick="closeCvModal()" class="absolute top-4 right-4 p-2 rounded-xl hover:bg-slate-800/80 transition text-slate-300"><i data-lucide="x" class="w-5 h-5"></i></button>
+      
+      <div class="text-center space-y-2 border-b border-slate-800 pb-4">
+        <h3 class="text-2xl font-black text-brand-400">Curriculum Vitae</h3>
+        <p class="text-lg font-bold text-white" id="cvModalName">Imanuel Seo, S.Kom., Gr.</p>
+        <p class="text-xs text-slate-300">Guru Informatika & KKA - SMAN 6 Kupang</p>
+      </div>
+
+      <div class="space-y-4 text-xs sm:text-sm">
+        <div>
+          <h4 class="font-bold text-brand-400 mb-1 flex items-center gap-1"><i data-lucide="user" class="w-4 h-4"></i> Ringkasan Eksekutif</h4>
+          <p class="text-slate-200 leading-relaxed">Tenaga pendidik profesional di bidang Informatika dan Koding/Kecerdasan Artifisial dengan pengalaman lebih dari 9 tahun di dunia pendidikan TIK. Ahli dalam implementasi Kurikulum Merdeka, sains data dasar, serta pemanfaatan tools AI generasi baru.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-brand-400 mb-1 flex items-center gap-1"><i data-lucide="graduation-cap" class="w-4 h-4"></i> Pendidikan</h4>
+          <p class="text-slate-200">S1 Pendidikan Ilmu Komputer / Teknik Informatika (S.Kom.) & Gelar Gr. (Guru Profesional)</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-brand-400 mb-1 flex items-center gap-1"><i data-lucide="briefcase" class="w-4 h-4"></i> Riwayat Pekerjaan</h4>
+          <ul class="list-disc list-inside text-slate-200 space-y-1">
+            <li><strong class="text-white">SMA Negeri 6 Kupang (2024 - Sekarang):</strong> Guru Informatika & KKA</li>
+            <li><strong class="text-white">SUPM Negeri Kupang (2014 - 2021):</strong> Pengajar TIK & Pengelola Lab Komputer</li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-brand-400 mb-1 flex items-center gap-1"><i data-lucide="award" class="w-4 h-4"></i> Sertifikasi & Prestasi</h4>
+          <ul class="list-disc list-inside text-slate-200 space-y-1">
+            <li>Peserta Terpilih Program Balai Talenta Indonesia (BTI 2026)</li>
+            <li>Sertifikasi Pendidik Gr. (Guru Profesional Informatika)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+        <button onclick="closeCvModal()" class="px-5 py-2.5 rounded-xl bg-slate-800 text-white text-xs font-semibold hover:bg-slate-700 transition">Tutup</button>
+        <button onclick="triggerCvDownload()" class="px-5 py-2.5 rounded-xl bg-brand-600 text-white text-xs font-semibold hover:bg-brand-700 transition flex items-center gap-1">
+          <i data-lucide="download" class="w-4 h-4"></i> Unduh Ringkasan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT MODALS FOR ADMIN MODE -->
+  <!-- Edit Bio Modal -->
+  <div id="editBioModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card max-w-lg w-full rounded-3xl p-6 space-y-4 relative border border-slate-700 shadow-2xl">
+      <h3 class="text-xl font-bold text-amber-400 flex items-center gap-2"><i data-lucide="edit-3" class="w-5 h-5"></i> Edit Bio Profil</h3>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-slate-300">Deskripsi Ringkasan Profil</label>
+        <textarea id="editBioInput" rows="5" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeEditBioModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs">Batal</button>
+        <button onclick="saveBioModal()" class="px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700">Simpan Ke Cloud</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Vision Modal -->
+  <div id="editVisionModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card max-w-lg w-full rounded-3xl p-6 space-y-4 relative border border-slate-700 shadow-2xl">
+      <h3 class="text-xl font-bold text-amber-400 flex items-center gap-2"><i data-lucide="edit-3" class="w-5 h-5"></i> Edit Visi Pembelajaran</h3>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-slate-300">Teks Visi Pembelajaran</label>
+        <textarea id="editVisionInput" rows="3" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeEditVisionModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs">Batal</button>
+        <button onclick="saveVisionModal()" class="px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700">Simpan Ke Cloud</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Stats Modal -->
+  <div id="editStatsModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card max-w-lg w-full rounded-3xl p-6 space-y-4 relative border border-slate-700 shadow-2xl">
+      <h3 class="text-xl font-bold text-amber-400 flex items-center gap-2"><i data-lucide="edit-3" class="w-5 h-5"></i> Edit Statistik & Prestasi</h3>
+      <input type="hidden" id="editStatsType" />
+      
+      <div id="statsFieldActiveYears" class="space-y-3 hidden">
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-300">Tahun/Masa Aktif</label>
+          <input type="text" id="editActiveYearsInput" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" placeholder="Misal: 2024-Aktif" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-300">Lokasi / Instansi</label>
+          <input type="text" id="editActiveSchoolInput" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" placeholder="Misal: SMAN 6 Kupang" />
+        </div>
+      </div>
+
+      <div id="statsFieldStudents" class="space-y-3 hidden">
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-300">Jumlah Siswa Didik</label>
+          <input type="text" id="editStudentsCountInput" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" placeholder="Misal: 1000+" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-300">Label Keterangan</label>
+          <input type="text" id="editStudentsLabelInput" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" placeholder="Misal: Siswa Didik" />
+        </div>
+      </div>
+
+      <div id="statsFieldAchievement" class="space-y-3 hidden">
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-300">Judul Prestasi Utama</label>
+          <input type="text" id="editAchievementTitleInput" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" placeholder="Misal: 🏆 Prestasi BTI 2026" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-300">Keterangan / Detail Prestasi</label>
+          <textarea id="editAchievementDescInput" rows="2" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" placeholder="Misal: Lolos Seleksi Balai Talenta Indonesia..."></textarea>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeEditStatsModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs">Batal</button>
+        <button onclick="saveStatsModal()" class="px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700">Simpan Ke Cloud</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Experience Modal -->
+  <div id="experienceModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card max-w-lg w-full rounded-3xl p-6 space-y-4 relative border border-slate-700 shadow-2xl">
+      <h3 id="expModalTitle" class="text-xl font-bold text-amber-400 flex items-center gap-2"><i data-lucide="plus-circle" class="w-5 h-5"></i> Tambah Pengalaman</h3>
+      <input type="hidden" id="expModalId" />
+      
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-slate-300">Jabatan / Peran</label>
+        <input type="text" id="expTitleInput" placeholder="Misal: Guru Informatika & KKA" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" required />
+      </div>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-slate-300">Instansi / Sekolah</label>
+        <input type="text" id="expInstInput" placeholder="Misal: SMA Negeri 6 Kupang" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" required />
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-300">Periode / Tahun</label>
+          <input type="text" id="expYearInput" placeholder="2024 - Sekarang" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" required />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1 text-slate-300">Lokasi</label>
+          <input type="text" id="expLocInput" placeholder="Kupang, NTT" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" required />
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-slate-300">Deskripsi Tugas & Prestasi</label>
+        <textarea id="expDescInput" rows="3" placeholder="Bertanggung jawab mengampu..." class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs"></textarea>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeExperienceModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs">Batal</button>
+        <button onclick="saveExperienceModal()" class="px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700">Simpan Ke Cloud</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Skill Focus Modal -->
+  <div id="addSkillModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-card max-w-md w-full rounded-3xl p-6 space-y-4 relative border border-slate-700 shadow-2xl">
+      <h3 class="text-xl font-bold text-amber-400 flex items-center gap-2"><i data-lucide="plus-circle" class="w-5 h-5"></i> Tambah Fokus Keahlian</h3>
+      <div>
+        <label class="block text-xs font-semibold mb-1 text-slate-300">Nama Keahlian Baru</label>
+        <input type="text" id="skillFocusInput" placeholder="Misal: Machine Learning, Cloud Computing" class="w-full p-3 rounded-xl border border-slate-700 bg-slate-900 text-white text-xs" />
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeAddSkillModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-white text-xs">Batal</button>
+        <button onclick="saveSkillFocusModal()" class="px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700">Tambahkan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="py-8 text-center text-xs text-slate-300 border-t border-slate-800 relative z-10 bg-slate-950/80 backdrop-blur-md">
+    <p>© <span id="year"></span> <span id="footerName">Imanuel Seo, S.Kom., Gr.</span> All rights reserved.</p>
+    <p class="text-[10px] text-slate-400 mt-1">SMA Negeri 6 Kupang - Kota Kupang, Nusa Tenggara Timur</p>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Setup App ID & Config provided by environment
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'imanuel-seo-portfolio';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+      apiKey: "demo-key",
+      authDomain: "demo.firebaseapp.com",
+      projectId: "demo-project",
+      storageBucket: "demo.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:123456"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Initial default state
+    const defaultData = {
+      profileImage: "https://placehold.co/400x400/2563eb/ffffff?text=Imanuel+Seo+S.Kom",
+      name: "Imanuel Seo, S.Kom., Gr.",
+      tagline: "Informatics Teacher & AI Enthusiast",
+      quote: `"Kita hanya bisa melihat jarak pendek ke depan, tetapi kita bisa melihat banyak hal yang perlu dilakukan di sana"`,
+      bioText: "Halo! Saya Imanuel Seo, S.Kom., Gr. Saya adalah guru Informatika dan KKA (Koding dan Kecerdasan Artifisial) di SMA Negeri 6 Kupang. Berfokus pada integrasi teknologi modern, pemrograman terstruktur, dan pemanfaatan AI ke dalam pola pikir belajar peserta didik.",
+      learningVision: `"Membantu peserta didik menjadi generasi digital yang kreatif, kritis, adaptif terhadap teknologi AI, dan berkarakter kuat."`,
+      stats: {
+        activeYears: "2024-Aktif",
+        activeSchool: "SMAN 6 Kupang",
+        studentsCount: "1000+",
+        studentsLabel: "Siswa Didik",
+        achievementTitle: "🏆 Prestasi BTI 2026",
+        achievementDesc: "Lolos Seleksi Balai Talenta Indonesia & Fasilitator Digital"
+      },
+      skillsFocus: [
+        "Computational Thinking",
+        "Artificial Intelligence",
+        "Data Science",
+        "Programming",
+        "Digital Literacy",
+        "Web Development"
+      ],
+      experiences: [
+        {
+          id: "1",
+          year: "2024 - Sekarang",
+          location: "Kupang, NTT",
+          title: "Guru Informatika & KKA",
+          institution: "SMA Negeri 6 Kupang",
+          desc: "Bertanggung jawab mengampu mata pelajaran Informatika dan KKA (Koding dan Kecerdasan Artifisial), merancang Kurikulum Merdeka berbasis Problem-Based Learning, serta membimbing siswa dalam kompetisi teknologi digital."
+        },
+        {
+          id: "2",
+          year: "2026",
+          location: "Balai Talenta Indonesia",
+          title: "Peserta & Fasilitator Terpilih BTI",
+          institution: "Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi",
+          desc: "Terpilih dalam program penguatan talenta digital pendidik Balai Talenta Indonesia (BTI 2026), aktif dalam pengembangan media digital inovatif dan komunitas pendidik TIK."
+        },
+        {
+          id: "3",
+          year: "2014 - 2021",
+          location: "Kupang, NTT",
+          title: "Pengajar TIK & Pengelola Laboratorium",
+          institution: "SUPM Negeri Kupang",
+          desc: "Mengajar teknologi informasi komputer, mengelola infrastruktur jaringan laboratorium sekolah, dan memfasilitasi ujian berbasis komputer (CBT)."
+        }
+      ]
+    };
+
+    let localPortfolioData = { ...defaultData };
+    let editModeActive = false;
+
+    // Public Firestore Path according to RULE 1
+    const portfolioDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'portfolio', 'main');
+
+    // Initialize Auth & Firestore Listener
+    async function initFirestore() {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+
+        // Real-time listener for portfolio data
+        onSnapshot(portfolioDocRef, (snapshot) => {
+          if (snapshot.exists()) {
+            localPortfolioData = snapshot.data();
+          } else {
+            // Seed initial data if document doesn't exist
+            setDoc(portfolioDocRef, defaultData);
+            localPortfolioData = { ...defaultData };
+          }
+          renderPortfolioUI();
+          updateSyncStatus(true, "Tersimpan di Cloud ✅");
+        }, (error) => {
+          console.error("Firestore listener error:", error);
+          updateSyncStatus(false, "Gagal Sinkronisasi Database");
+        });
+
+      } catch (err) {
+        console.error("Auth / Init error:", err);
+        updateSyncStatus(false, "Gagal Terhubung");
+      }
+    }
+
+    function updateSyncStatus(isSuccess, text) {
+      const syncDot = document.getElementById('syncDot');
+      const syncText = document.getElementById('syncText');
+      if (syncDot && syncText) {
+        syncText.textContent = text;
+        if (isSuccess) {
+          syncDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
+        } else {
+          syncDot.className = "w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse";
+        }
+      }
+    }
+
+    // Save state back to Firestore
+    async function saveToFirestore() {
+      updateSyncStatus(false, "Menyimpan ke Cloud...");
+      try {
+        await setDoc(portfolioDocRef, localPortfolioData, { merge: true });
+        updateSyncStatus(true, "Tersimpan di Cloud ✅");
+      } catch (e) {
+        console.error("Error saving data:", e);
+        updateSyncStatus(false, "Gagal Menyimpan");
+      }
+    }
+
+    // Render Function to update all HTML elements dynamically
+    function renderPortfolioUI() {
+      const data = localPortfolioData;
+
+      // Profile Photo
+      if (data.profileImage) {
+        document.getElementById('profileImage').src = data.profileImage;
+        document.getElementById('navAvatar').src = data.profileImage;
+      }
+
+      // Hero info
+      if (data.name) {
+        document.getElementById('heroName').textContent = data.name;
+        document.getElementById('navNameText').innerHTML = `${data.name}<span class="text-brand-400">.</span>`;
+        document.getElementById('footerName').textContent = `${data.name}`;
+        document.getElementById('cvModalName').textContent = `${data.name}`;
+      }
+      if (data.tagline) document.getElementById('heroTagline').textContent = data.tagline;
+      if (data.quote) document.getElementById('heroQuote').textContent = data.quote;
+
+      // Bio & Vision
+      if (data.bioText) document.getElementById('aboutBioText').innerHTML = data.bioText;
+      if (data.learningVision) document.getElementById('learningVisionText').textContent = data.learningVision;
+
+      // Stats
+      if (data.stats) {
+        document.getElementById('statActiveYears').textContent = data.stats.activeYears || "2024-Aktif";
+        document.getElementById('statActiveSchool').textContent = data.stats.activeSchool || "SMAN 6 Kupang";
+        document.getElementById('statStudentsCount').textContent = data.stats.studentsCount || "1000+";
+        document.getElementById('statStudentsLabel').textContent = data.stats.studentsLabel || "Siswa Didik";
+        document.getElementById('statAchievementTitle').textContent = data.stats.achievementTitle || "🏆 Prestasi BTI 2026";
+        document.getElementById('statAchievementDesc').textContent = data.stats.achievementDesc || "Lolos Seleksi Balai Talenta Indonesia";
+      }
+
+      // Skills Focus Badges
+      const skillsContainer = document.getElementById('skillsFocusContainer');
+      skillsContainer.innerHTML = '';
+      (data.skillsFocus || []).forEach((skill, index) => {
+        const badge = document.createElement('div');
+        badge.className = 'px-3 py-1.5 text-xs font-semibold rounded-xl bg-brand-500/20 text-brand-300 border border-brand-500/30 flex items-center gap-1.5 group';
+        badge.innerHTML = `
+          <span>${skill}</span>
+          <button class="admin-only hidden text-rose-400 hover:text-rose-300 ml-1 text-[10px]" onclick="removeSkillFocus(${index})">✕</button>
+        `;
+        skillsContainer.appendChild(badge);
+      });
+
+      // Experience Timeline
+      const timeline = document.getElementById('experienceTimeline');
+      timeline.innerHTML = '';
+      (data.experiences || []).forEach((exp) => {
+        const item = document.createElement('div');
+        item.className = 'relative group';
+        item.innerHTML = `
+          <div class="absolute -left-[31px] sm:-left-[47px] top-1.5 w-6 h-6 rounded-full bg-brand-500 border-4 border-slate-950 shadow-md"></div>
+          <div class="glass-card p-6 sm:p-8 rounded-3xl shadow-xl hover:border-brand-500/50 transition">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span class="px-3 py-1 bg-brand-500/20 text-brand-300 font-bold text-xs rounded-full border border-brand-500/30">${exp.year}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-slate-300 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-brand-400"></i> ${exp.location}</span>
+                <button class="admin-only hidden p-1 bg-amber-500/20 text-amber-300 hover:bg-amber-500/40 rounded text-xs" onclick="openEditExperienceModal('${exp.id}')">✏️</button>
+                <button class="admin-only hidden p-1 bg-rose-500/20 text-rose-300 hover:bg-rose-500/40 rounded text-xs" onclick="deleteExperience('${exp.id}')">🗑️</button>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-white">${exp.title}</h3>
+            <h4 class="text-sm font-semibold text-brand-400 mb-3">${exp.institution}</h4>
+            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">${exp.desc}</p>
+          </div>
+        `;
+        timeline.appendChild(item);
+      });
+
+      // Refresh edit mode visibility
+      applyEditModeVisibility();
+      lucide.createIcons();
+    }
+
+    function applyEditModeVisibility() {
+      const adminBtns = document.querySelectorAll('.admin-only');
+      adminBtns.forEach(btn => {
+        if (editModeActive) {
+          btn.classList.remove('hidden');
+        } else {
+          btn.classList.add('hidden');
+        }
+      });
+    }
+
+    // Compress uploaded image before saving to prevent high Firestore document size
+    window.uploadAndSaveProfilePhoto = function(event) {
+      if (event.target.files && event.target.files[0]) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const maxDim = 500;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > maxDim) {
+                height *= maxDim / width;
+                width = maxDim;
+              }
+            } else {
+              if (height > maxDim) {
+                width *= maxDim / height;
+                height = maxDim;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Convert to JPEG base64 string
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.82);
+
+            localPortfolioData.profileImage = compressedBase64;
+            saveToFirestore();
+            showToast("Foto Profil Permanen Diperbarui!", "Foto tersimpan di cloud & otomatis terlihat oleh semua pengunjung link.");
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    // Global Window functions for Admin Editing Controls
+    window.toggleEditMode = function() {
+      editModeActive = !editModeActive;
+      const label = document.getElementById('editBtnLabel');
+      const btn = document.getElementById('toggleEditBtn');
+
+      if (editModeActive) {
+        label.textContent = "Mode Edit: ON";
+        btn.className = "bg-amber-500 text-slate-950 border border-amber-400 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-amber-500/20";
+        showToast("Mode Edit Aktif", "Anda dapat menambahkan atau mengubah isi portofolio ini.");
+      } else {
+        label.textContent = "Mode Edit: OFF";
+        btn.className = "bg-amber-600/30 hover:bg-amber-600/50 text-amber-300 border border-amber-500/50 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md";
+        showToast("Mode Edit Non-aktif", "Tampilan kembali ke mode pembaca.");
+      }
+      applyEditModeVisibility();
+    };
+
+    // Edit Bio
+    window.openEditBioModal = function() {
+      document.getElementById('editBioInput').value = localPortfolioData.bioText || '';
+      document.getElementById('editBioModal').classList.remove('hidden');
+    };
+    window.closeEditBioModal = function() {
+      document.getElementById('editBioModal').classList.add('hidden');
+    };
+    window.saveBioModal = function() {
+      localPortfolioData.bioText = document.getElementById('editBioInput').value;
+      saveToFirestore();
+      closeEditBioModal();
+      showToast("Bio Diperbarui", "Perubahan tersimpan secara permanen.");
+    };
+
+    // Edit Vision
+    window.openEditVisionModal = function() {
+      document.getElementById('editVisionInput').value = localPortfolioData.learningVision || '';
+      document.getElementById('editVisionModal').classList.remove('hidden');
+    };
+    window.closeEditVisionModal = function() {
+      document.getElementById('editVisionModal').classList.add('hidden');
+    };
+    window.saveVisionModal = function() {
+      localPortfolioData.learningVision = document.getElementById('editVisionInput').value;
+      saveToFirestore();
+      closeEditVisionModal();
+      showToast("Visi Diperbarui", "Perubahan tersimpan secara permanen.");
+    };
+
+    // Edit Stats Modal
+    window.openEditStatsModal = function(type) {
+      document.getElementById('editStatsType').value = type;
+      
+      document.getElementById('statsFieldActiveYears').classList.add('hidden');
+      document.getElementById('statsFieldStudents').classList.add('hidden');
+      document.getElementById('statsFieldAchievement').classList.add('hidden');
+
+      if (type === 'activeYears') {
+        document.getElementById('statsFieldActiveYears').classList.remove('hidden');
+        document.getElementById('editActiveYearsInput').value = localPortfolioData.stats?.activeYears || '';
+        document.getElementById('editActiveSchoolInput').value = localPortfolioData.stats?.activeSchool || '';
+      } else if (type === 'studentsCount') {
+        document.getElementById('statsFieldStudents').classList.remove('hidden');
+        document.getElementById('editStudentsCountInput').value = localPortfolioData.stats?.studentsCount || '';
+        document.getElementById('editStudentsLabelInput').value = localPortfolioData.stats?.studentsLabel || '';
+      } else if (type === 'achievement') {
+        document.getElementById('statsFieldAchievement').classList.remove('hidden');
+        document.getElementById('editAchievementTitleInput').value = localPortfolioData.stats?.achievementTitle || '';
+        document.getElementById('editAchievementDescInput').value = localPortfolioData.stats?.achievementDesc || '';
+      }
+
+      document.getElementById('editStatsModal').classList.remove('hidden');
+    };
+    window.closeEditStatsModal = function() {
+      document.getElementById('editStatsModal').classList.add('hidden');
+    };
+    window.saveStatsModal = function() {
+      const type = document.getElementById('editStatsType').value;
+      if (!localPortfolioData.stats) localPortfolioData.stats = {};
+
+      if (type === 'activeYears') {
+        localPortfolioData.stats.activeYears = document.getElementById('editActiveYearsInput').value;
+        localPortfolioData.stats.activeSchool = document.getElementById('editActiveSchoolInput').value;
+      } else if (type === 'studentsCount') {
+        localPortfolioData.stats.studentsCount = document.getElementById('editStudentsCountInput').value;
+        localPortfolioData.stats.studentsLabel = document.getElementById('editStudentsLabelInput').value;
+      } else if (type === 'achievement') {
+        localPortfolioData.stats.achievementTitle = document.getElementById('editAchievementTitleInput').value;
+        localPortfolioData.stats.achievementDesc = document.getElementById('editAchievementDescInput').value;
+      }
+
+      saveToFirestore();
+      closeEditStatsModal();
+      showToast("Statistik Diperbarui", "Perubahan tersimpan di cloud.");
+    };
+
+    // Add Skill Focus
+    window.openAddSkillFocusModal = function() {
+      document.getElementById('skillFocusInput').value = '';
+      document.getElementById('addSkillModal').classList.remove('hidden');
+    };
+    window.closeAddSkillModal = function() {
+      document.getElementById('addSkillModal').classList.add('hidden');
+    };
+    window.saveSkillFocusModal = function() {
+      const val = document.getElementById('skillFocusInput').value.trim();
+      if (val) {
+        if (!localPortfolioData.skillsFocus) localPortfolioData.skillsFocus = [];
+        localPortfolioData.skillsFocus.push(val);
+        saveToFirestore();
+        showToast("Keahlian Ditambahkan", `${val} telah ditambahkan ke fokus keahlian.`);
+      }
+      closeAddSkillModal();
+    };
+    window.removeSkillFocus = function(index) {
+      if (localPortfolioData.skillsFocus) {
+        localPortfolioData.skillsFocus.splice(index, 1);
+        saveToFirestore();
+        showToast("Keahlian Dihapus", "Fokus keahlian berhasil diperbarui.");
+      }
+    };
+
+    // Experience CRUD
+    window.openAddExperienceModal = function() {
+      document.getElementById('expModalTitle').innerHTML = `<i data-lucide="plus-circle" class="w-5 h-5"></i> Tambah Pengalaman`;
+      document.getElementById('expModalId').value = '';
+      document.getElementById('expTitleInput').value = '';
+      document.getElementById('expInstInput').value = '';
+      document.getElementById('expYearInput').value = '';
+      document.getElementById('expLocInput').value = '';
+      document.getElementById('expDescInput').value = '';
+      document.getElementById('experienceModal').classList.remove('hidden');
+      lucide.createIcons();
+    };
+
+    window.openEditExperienceModal = function(id) {
+      const exp = (localPortfolioData.experiences || []).find(item => item.id === id);
+      if (!exp) return;
+
+      document.getElementById('expModalTitle').innerHTML = `<i data-lucide="edit-3" class="w-5 h-5"></i> Edit Pengalaman`;
+      document.getElementById('expModalId').value = exp.id;
+      document.getElementById('expTitleInput').value = exp.title || '';
+      document.getElementById('expInstInput').value = exp.institution || '';
+      document.getElementById('expYearInput').value = exp.year || '';
+      document.getElementById('expLocInput').value = exp.location || '';
+      document.getElementById('expDescInput').value = exp.desc || '';
+      document.getElementById('experienceModal').classList.remove('hidden');
+      lucide.createIcons();
+    };
+
+    window.closeExperienceModal = function() {
+      document.getElementById('experienceModal').classList.add('hidden');
+    };
+
+    window.saveExperienceModal = function() {
+      const id = document.getElementById('expModalId').value;
+      const title = document.getElementById('expTitleInput').value;
+      const institution = document.getElementById('expInstInput').value;
+      const year = document.getElementById('expYearInput').value;
+      const location = document.getElementById('expLocInput').value;
+      const desc = document.getElementById('expDescInput').value;
+
+      if (!title || !institution) {
+        alert("Judul dan instansi wajib diisi!");
+        return;
+      }
+
+      if (!localPortfolioData.experiences) localPortfolioData.experiences = [];
+
+      if (id) {
+        // Edit existing
+        const index = localPortfolioData.experiences.findIndex(item => item.id === id);
+        if (index !== -1) {
+          localPortfolioData.experiences[index] = { id, title, institution, year, location, desc };
+        }
+      } else {
+        // Add new
+        const newId = Date.now().toString();
+        localPortfolioData.experiences.unshift({ id: newId, title, institution, year, location, desc });
+      }
+
+      saveToFirestore();
+      closeExperienceModal();
+      showToast("Pengalaman Tersimpan", "Data riwayat pengalaman diperbarui di database.");
+    };
+
+    window.deleteExperience = function(id) {
+      if (confirm("Apakah Anda yakin ingin menghapus pengalaman ini?")) {
+        localPortfolioData.experiences = localPortfolioData.experiences.filter(item => item.id !== id);
+        saveToFirestore();
+        showToast("Pengalaman Dihapus", "Riwayat telah diperbarui.");
+      }
+    };
+
+    // Initialize Firebase on window load
+    window.onload = function() {
+      initFirestore();
+    };
+  </script>
+
+  <!-- UI Helpers JS -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileDrawer = document.getElementById('mobileDrawer');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileDrawer.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileDrawer.classList.add('hidden');
+      });
+    });
+
+    // Dynamic Typing Loop
+    const words = [
+      "Guru Informatika SMAN 6 Kupang",
+      "Pengajar KKA & AI Literacy",
+      "Inovator Pembelajaran Digital",
+      "Fasilitator Talenta BTI 2026"
+    ];
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typingElement = document.getElementById('typingText');
+
+    function typeLoop() {
+      const currentWord = words[wordIndex];
+      
+      if (isDeleting) {
+        typingElement.textContent = currentWord.substring(0, charIndex - 1);
+        charIndex--;
+      } else {
+        typingElement.textContent = currentWord.substring(0, charIndex + 1);
+        charIndex++;
+      }
+
+      let speed = isDeleting ? 40 : 80;
+
+      if (!isDeleting && charIndex === currentWord.length) {
+        speed = 2200;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        speed = 400;
+      }
+
+      setTimeout(typeLoop, speed);
+    }
+    typeLoop();
+
+    function filterProjects(category) {
+      const cards = document.querySelectorAll('.project-card');
+      const buttons = document.querySelectorAll('.project-filter-btn');
+
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-brand-600', 'text-white');
+        btn.classList.add('glass-card', 'text-slate-200');
+      });
+      event.target.classList.remove('glass-card', 'text-slate-200');
+      event.target.classList.add('bg-brand-600', 'text-white');
+
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function openModal(title, desc, tech, cat) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalDesc').textContent = desc;
+      document.getElementById('modalTech').textContent = tech;
+      document.getElementById('modalCategory').textContent = cat.toUpperCase();
+      document.getElementById('projectModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('projectModal').classList.add('hidden');
+    }
+
+    function openCvModal() {
+      document.getElementById('cvModal').classList.remove('hidden');
+    }
+
+    function closeCvModal() {
+      document.getElementById('cvModal').classList.add('hidden');
+    }
+
+    function triggerCvDownload() {
+      showToast("Mengunduh Ringkasan CV", "CV Imanuel Seo sedang disiapkan.");
+      setTimeout(() => {
+        closeCvModal();
+      }, 1200);
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('senderName').value;
+      const contact = document.getElementById('senderContact').value;
+      const message = document.getElementById('senderMessage').value;
+
+      const encodedMsg = encodeURIComponent(`Halo Pak Imanuel, saya ${name} (${contact}).\n\nPesan: ${message}`);
+      const waUrl = `https://wa.me/6281230914749?text=${encodedMsg}`;
+
+      showToast("Pesan Diteruskan ke WhatsApp", "Membuka aplikasi WhatsApp Anda...");
+
+      setTimeout(() => {
+        window.open(waUrl, '_blank');
+        document.getElementById('contactForm').reset();
+      }, 1000);
+    }
+
+    function showToast(title, message) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastMessage').textContent = message;
+
+      toast.classList.remove('translate-y-32', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-32', 'opacity-0');
+      }, 4000);
+    }
+
+    // Interactive Particle Canvas Background
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const particles = [];
+    const particleCount = Math.min(Math.floor(window.innerWidth / 25), 55);
+
+    for (let p = 0; p < particleCount; p++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2 + 1,
+        vx: (Math.random() - 0.5) * 0.7,
+        vy: (Math.random() - 0.5) * 0.7
+      });
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(96, 165, 250, 0.45)';
+      ctx.strokeStyle = 'rgba(96, 165, 250, 0.1)';
+
+      for (let a = 0; a < particleCount; a++) {
+        let p = particles[a];
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        for (let b = a + 1; b < particleCount; b++) {
+          let p2 = particles[b];
+          let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+          if (dist < 130) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  </script>
+</body>
+</html>
